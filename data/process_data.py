@@ -35,7 +35,9 @@ def clean_data(df):
         categories[column] = categories[column].astype(str).str.split('-').str.get(1)
         # convert column from string to numeric
         categories[column] = pd.to_numeric(categories[column])
-
+    
+    # convert to binary, i.e. map every value > 1 to 1
+    categories[categories.iloc[:,:]>1]=1
     # drop the original categories column from `df`
     df.drop('categories', axis=1, inplace=True)
     # concatenate the original dataframe with the new `categories` dataframe
@@ -50,7 +52,7 @@ def save_data(df, database_filename):
     save_data   function to save dataframe df in database
     '''
     engine = create_engine('sqlite:///'+database_filename)
-    df.to_sql('lugalTABLE', engine, index=False)  
+    df.to_sql('lugalTABLE', engine, index=False, if_exists='replace')  
 
 
 def main():

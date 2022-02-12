@@ -16,3 +16,6 @@ Project 2 of Udacity Data Science Nanodegree
 3. Run your web app: `python run.py`
 
 4. Click the `PREVIEW` button to open the homepage
+
+## Contact
+https://github.com/lugalbandaw
