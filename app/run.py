@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Heatmap
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -43,6 +43,14 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    df['len_message'] = df['message'].apply(lambda x: len(x))
+    
+    len_counts = df.groupby('len_message').count()['message']
+    len_names = list(len_counts.index)
+    
+    corr_df = df.iloc[:,3:].corr().values
+    corr_names = df.iloc[:,3:].columns
+    
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -61,6 +69,43 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=len_names,
+                    y=len_counts
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Message Lengths',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Length"
+                }
+            }
+        },
+        {
+            'data': [
+                Heatmap(
+                    z=corr_df,
+                    x=corr_names,
+                    y=corr_names
+                )
+            ],
+
+            'layout': {
+                'title': 'Correlation of Labels',
+                'yaxis': {
+                    'title': "Label"
+                },
+                'xaxis': {
+                    'title': "Label"
                 }
             }
         }
