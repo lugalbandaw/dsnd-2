@@ -78,9 +78,11 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
     # iterate through the columns and call sklearn's classification_report on each
     for target in category_names:
-        cr = classification_report(Y_test[target], Y_pred[target])
+        cr = classification_report(Y_test[target], Y_pred[target], output_dict=True, zero_division=0)
         print('\n*** '+target+'***\n')
-        print(cr)
+        print('precision: ', cr['weighted avg']['precision'])
+        print('recall: ', cr['weighted avg']['recall'])
+        print('f1-score: ', cr['weighted avg']['f1-score'])
 
 
 def save_model(model, model_filepath):
