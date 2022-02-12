@@ -37,7 +37,7 @@ def clean_data(df):
         categories[column] = pd.to_numeric(categories[column])
     
     # convert to binary, i.e. map every value > 1 to 1
-    categories[categories.iloc[:,:]>1]=1
+    categories[categories>1] = 1
     # drop the original categories column from `df`
     df.drop('categories', axis=1, inplace=True)
     # concatenate the original dataframe with the new `categories` dataframe
